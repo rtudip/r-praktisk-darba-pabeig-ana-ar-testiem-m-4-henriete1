@@ -1,10 +1,12 @@
-kordat <-read.table(file="variants1.txt")
 
-kordat[,9:ncol(kordat)]<-lapply(kordat[,9:ncol(kordat)], as.factor)
+kordat <- read.table("variants1.txt", dec = ",", strip.white = TRUE)
+
+kordat[, 9:ncol(kordat)] <- lapply(kordat[, 9:ncol(kordat)], as.factor)
+
 sink("results.txt")
 
-summary1 <- lapply(kordat[,9:ncol(kordat)], table) 
-print(summary1)
+
+print(summary(kordat))
 
 sl.by.b <- split(kordat$Slope, kordat$b)
 print(sl.by.b)
@@ -24,8 +26,8 @@ prockordat <- kordat[
   (kordat$adj.r.squared > -0.3 & kordat$adj.r.squared < 0),
 ]
 
-prockordat$Slope <- as.numeric(as.character(prockordat$Slope))
-prockordat$Slope <- 1 - 1 / prockordat$Slope
+k <- as.numeric(as.character(prockordat$Slope))
+prockordat$Slope <- 1 - 1 / k
 
 
 print(prockordat)
@@ -40,6 +42,7 @@ svg("scatter.svg", width = 7, height = 5)
 ggplot(kordat, aes(x = MAD, y = Average)) + geom_point() 
 
 ggsave("scatter.svg")
+dev.off()
 
 svg("boxplot.svg", width = 7, height = 5)
 kordat <- na.omit(kordat)
